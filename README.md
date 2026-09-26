@@ -29,7 +29,7 @@
 
 当前 Release 是**源码包，不是免安装程序**。首次准备需要联网下载运行环境、依赖和模型；准备完成后可完全在本机离线处理。
 
-1. 打开 [v0.1.0 Release](https://github.com/yihanlabs/information-safety-mask/releases/tag/v0.1.0)，下载 **Source code (zip)** 并完整解压。仓库目前为私有，需要有访问权限的 GitHub 账号。
+1. 打开 [v0.1.0 Release](https://github.com/yihanlabs/information-safety-mask/releases/tag/v0.1.0)，下载 **Source code (zip)** 并完整解压。源码可直接下载，无需仓库访问权限。
 2. 使用 Windows 10/11 x64，准备 [uv](https://docs.astral.sh/uv/getting-started/installation/)、[Node.js 22 或更高版本](https://nodejs.org/en/download)以及 pnpm 11 或 npm。已有 npm 时，脚本会调用锁定版本的 pnpm；Python 3.11 由 uv 自动准备。
 3. 双击 **安装与准备.cmd**（或 `setup.cmd`），等待依赖安装、界面构建和官方模型准备完成。
 4. 双击 **启动工具.cmd**（或 `start.cmd`），浏览器会打开本地工作台。之后日常使用只需运行此启动脚本。
