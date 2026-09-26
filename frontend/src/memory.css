@@ -1,0 +1,5 @@
+.memory-help { position:relative; flex-shrink:0; }
+.memory-help summary { cursor:pointer; text-decoration:underline; }
+.memory-help p { position:absolute; bottom:22px; right:0; width:min(320px,70vw); padding:12px; margin:0; background:#fff; border:1px solid #e6dbbd; box-shadow:0 4px 20px #243c3420; z-index:20; line-height:1.7; }
+.review-alert>button { flex-shrink:0; }
+.processing-card>strong small { font-size:10px; font-weight:normal; }

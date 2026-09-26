@@ -1,0 +1,77 @@
+import { test, expect } from '@playwright/test';
+import path from 'node:path';
+
+test('long-image width fit, virtual scrolling, saved view, precise masks and PNG', async ({ page, request }) => {
+  const headers = { 'X-Session-Token': 'e2e-local-only' };
+  await request.delete('/api/images', { headers });
+  await request.delete('/api/settings', { headers });
+  const regions: URL[] = [], loadedRegions: URL[] = [];
+  page.on('request', r => { if (r.url().includes('/region?')) regions.push(new URL(r.url())); });
+  page.on('response', r => { if (r.ok() && r.url().includes('/region?')) loadedRegions.push(new URL(r.url())); });
+  await page.goto('/#token=e2e-local-only');
+  await page.getByLabel('选择图片文件', { exact: true }).setInputFiles(path.resolve('../test-results/synthetic-tall.png'));
+  await expect(page.getByRole('button', { name: '确认此图片', exact: true })).toBeEnabled();
+  const canvas = page.getByTestId('canvas');
+  await expect(canvas).toHaveAttribute('data-image-height', '80000');
+  await expect(page.locator('.canvas-loading')).toHaveCount(0);
+  const bounds = (await canvas.boundingBox())!;
+  expect(bounds.height).toBeGreaterThanOrEqual(800);
+  expect(Number(await canvas.getAttribute('data-scale'))).toBeCloseTo((bounds.width-32)/400, 3);
+  await page.getByRole('button', { name: '查看全图', exact: true }).click();
+  expect(Number(await canvas.getAttribute('data-scale'))).toBeCloseTo((bounds.height-32)/80000, 6);
+  for (let i=0; i<5; i++) await page.getByRole('button', { name: '缩小', exact: true }).click();
+  expect(parseFloat((await page.locator('.zoom-label').textContent())!)).toBeLessThan(1);
+  await page.getByRole('button', { name: '适应宽度', exact: true }).click();
+  await page.mouse.move(bounds.x+bounds.width/2, bounds.y+bounds.height/2);
+  const initial = Number(await canvas.getAttribute('data-scale'));
+  await page.mouse.wheel(0, 500);
+  await expect.poll(async () => Number(await canvas.getAttribute('data-view-y'))).toBeLessThan(-400);
+  expect(Number(await canvas.getAttribute('data-scale'))).toBe(initial);
+  await page.keyboard.press('End');
+  await expect.poll(() => Number(loadedRegions.at(-1)?.searchParams.get('y') || 0)).toBeGreaterThan(78000);
+  for (const url of regions) {
+    expect(Number(url.searchParams.get('output_width'))).toBeLessThanOrEqual(2048);
+    expect(Number(url.searchParams.get('output_height'))).toBeLessThanOrEqual(2048);
+  }
+  await page.keyboard.down('Control'); await page.mouse.wheel(0, -100); await page.keyboard.up('Control');
+  await expect.poll(async () => Number(await canvas.getAttribute('data-scale'))).toBeGreaterThan(initial);
+  const worldCenter = async () => {
+    const b = (await canvas.boundingBox())!;
+    return (b.height/2-Number(await canvas.getAttribute('data-view-y')))/Number(await canvas.getAttribute('data-scale'));
+  };
+  const center = await worldCenter();
+  await page.getByRole('button', { name: '收起规则与遮盖', exact: true }).click();
+  await expect.poll(worldCenter).toBeCloseTo(center, 0);
+  await page.getByRole('button', { name: '展开规则与遮盖', exact: true }).click();
+  await expect.poll(worldCenter).toBeCloseTo(center, 0);
+  await page.getByRole('button', { name: '专注检查', exact: true }).click();
+  await expect(page.locator('.queue-panel')).toBeHidden();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.queue-panel')).toBeVisible();
+  await page.getByRole('button', { name: '手动补框', exact: true }).click();
+  const b = (await canvas.boundingBox())!;
+  await page.mouse.move(b.x+b.width/2-25, b.y+b.height-140);
+  await page.mouse.down();
+  await page.mouse.move(b.x+b.width/2+25, b.y+b.height-80, { steps: 8 });
+  await page.mouse.up();
+  await expect.poll(async () => {
+    const images = await (await request.get('/api/images', { headers })).json();
+    return images[0].edits.manual[0]?.box.y || 0;
+  }).toBeGreaterThan(78000);
+  const savedY = await worldCenter();
+  await page.getByLabel('选择图片文件', { exact: true }).setInputFiles(path.resolve('../test-results/synthetic.png'));
+  await expect(page.locator('.queue-item')).toHaveCount(2);
+  await page.getByRole('button', { name: '查看 synthetic.png', exact: true }).click();
+  await page.getByRole('button', { name: '查看 synthetic-tall.png', exact: true }).click();
+  await expect.poll(worldCenter).toBeCloseTo(savedY, 0);
+  await page.getByRole('tab', { name: /当前遮盖/ }).click();
+  await page.locator('.mask-info').first().click();
+  await expect.poll(worldCenter).toBeLessThan(2000);
+  await page.keyboard.press('End');
+  await page.screenshot({ path: '../test-results/workbench-large-region.png' });
+  await page.getByRole('button', { name: '确认并下一张', exact: true }).click();
+  await page.getByRole('button', { name: '查看 synthetic-tall.png', exact: true }).click();
+  const download = page.waitForEvent('download');
+  await page.getByRole('button', { name: '导出本张', exact: true }).click();
+  expect((await download).suggestedFilename()).toMatch(/^sanitized_\d+\.png$/);
+});
