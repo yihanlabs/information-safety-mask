@@ -2,6 +2,8 @@
 
 中文本地浏览器工作台：批量导入图片，自动遮盖敏感文字，逐张调整并确认，下载清理元数据后的独立 PNG。图片由用户手动上传，应用不接入云端模型。
 
+A local image redaction tool for Windows. Detect sensitive Chinese text with PaddleOCR, review long screenshots, adjust masks, and export sanitized PNGs. After initial setup, image processing runs offline.
+
 **[下载 v0.1.0 源码版](https://github.com/yihanlabs/information-safety-mask/releases/tag/v0.1.0)** · [安装与启动](#安装与启动) · [本机实测记录](VALIDATION.md)
 
 ## 界面预览
