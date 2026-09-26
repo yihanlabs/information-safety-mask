@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><title>隐去 · 分享封面</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:1280px;height:640px;overflow:hidden}body{font-family:"Microsoft YaHei",sans-serif;background:#edf4ef;color:#163e33}.art{position:relative;width:1280px;height:640px;background:radial-gradient(ellipse at 90% 0%,#d7e8de 0,transparent 58%);overflow:hidden}.brand{position:absolute;left:56px;top:46px;display:flex;align-items:center;gap:15px}.icon{width:52px;height:52px;background:#176d57;border-radius:15px;color:white;display:grid;place-items:center}.name{font-size:42px;font-weight:750;letter-spacing:2px}.eyebrow{font-size:16px;color:#567669;border-left:1px solid #b8cfc0;padding-left:18px;margin-left:4px}.copy{position:absolute;left:56px;top:153px;width:490px}.copy h1{font-size:46px;line-height:1.36;letter-spacing:-1px;margin:0;font-weight:700}.copy h1 span{color:#197057}.copy p{font-size:19px;color:#607a6d;line-height:1.8;margin-top:27px;max-width:420px}.pill{display:inline-flex;align-items:center;border:1px solid #a5c9b4;color:#276f52;background:#e1eee5;font-size:16px;padding:7px 15px;border-radius:30px;margin-top:10px}.screen{position:absolute;width:654px;left:581px;top:122px;border:1px solid #a6bfaf;border-radius:12px;overflow:hidden;box-shadow:0 24px 55px #124b3426;background:white}.screen img{display:block;width:100%;height:auto}.under{position:absolute;left:587px;top:552px;font-size:14px;color:#6d8a7b}.footer{position:absolute;left:56px;bottom:37px;font-size:16px;color:#567669}.footer b{color:#176d57;font-weight:600}.video{width:1920px;height:960px}.video .art{transform:scale(1.5);transform-origin:top left}.outro .screen{display:none}.outro .copy{top:159px;width:1160px}.outro .copy h1{font-size:50px}.outro .copy p{max-width:none;font-size:24px}.outro .under{display:none}.outro .footer{font-size:20px}.outro .pill{font-size:20px;margin-top:12px}
+</style>
+<div class="art">
+  <div class="brand"><div class="icon"><svg width="32" height="36" viewBox="0 0 24 28" fill="none" aria-hidden="true"><path d="M12 2L21 6V13C21 20 16 24 12 26C8 24 3 20 3 13V6L12 2Z" stroke="currentColor" stroke-width="2"/><path d="m7 13 3 3 7-7" stroke="currentColor" stroke-width="2"/></svg></div><span class="name">隐去</span><span class="eyebrow">本地图片脱敏</span></div>
+  <div class="copy"><h1>上传云端前，<br><span>先在本地脱敏</span></h1><p>中文 OCR · 长图检查<br>手动补框 · 独立 PNG</p><span class="pill">Windows · MIT 开源</span></div>
+  <div class="screen"><img src="../../docs/images/workbench.png" alt="使用合成数据的实际脱敏工作台"></div>
+  <div class="under">真实界面 · 合成示例</div>
+  <div class="footer"><b>yihanlabs</b> / information-safety-mask</div>
+</div>
+<script>
+const scene=new URLSearchParams(location.search).get('scene');
+if(scene){document.body.classList.add('video');document.documentElement.style.width='1920px';document.documentElement.style.height='960px'}
+if(scene==='outro'){
+ document.body.classList.add('outro');
+ document.querySelector('h1').innerHTML='首次准备需联网，之后可离线处理。<br><span>导出前，请检查整张图片。</span>';
+ document.querySelector('.copy p').textContent='在 GitHub 下载源码，按安装说明开始使用。';
+ document.querySelector('.pill').textContent='合成示例 · 演示已剪辑，不代表实际识别耗时';
+}
+</script></html>

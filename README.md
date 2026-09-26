@@ -4,7 +4,15 @@
 
 A local image redaction tool for Windows. Detect sensitive Chinese text with PaddleOCR, review long screenshots, adjust masks, and export sanitized PNGs. After initial setup, image processing runs offline.
 
-**[下载 v0.1.0 源码版](https://github.com/yihanlabs/information-safety-mask/releases/tag/v0.1.0)** · [安装与启动](#安装与启动) · [本机实测记录](VALIDATION.md)
+**[下载 v0.1.1 源码版](https://github.com/yihanlabs/information-safety-mask/releases/tag/v0.1.1)** · [安装与启动](#安装与启动) · [本机实测记录](VALIDATION.md) · [MIT 许可证](LICENSE)
+
+## 30 秒演示
+
+[![隐去：上传云端前，先在本地脱敏；点击下载中文配音演示](docs/images/social-preview.png)](https://github.com/yihanlabs/information-safety-mask/releases/download/v0.1.1/yinqu-demo-v0.1.1.mp4)
+
+[下载演示视频（32.5 秒，中文配音与字幕）](https://github.com/yihanlabs/information-safety-mask/releases/download/v0.1.1/yinqu-demo-v0.1.1.mp4) · [中文字幕 SRT](docs/media/yinqu-demo.zh-CN.srt)
+
+演示使用合成图片与真实本地识别，等待过程已剪辑，不代表实际处理速度。首次准备需联网，之后可离线处理；导出前仍需人工检查。
 
 ## 界面预览
 
@@ -31,7 +39,7 @@ A local image redaction tool for Windows. Detect sensitive Chinese text with Pad
 
 当前 Release 是**源码包，不是免安装程序**。首次准备需要联网下载运行环境、依赖和模型；准备完成后可完全在本机离线处理。
 
-1. 打开 [v0.1.0 Release](https://github.com/yihanlabs/information-safety-mask/releases/tag/v0.1.0)，下载 **Source code (zip)** 并完整解压。源码可直接下载，无需仓库访问权限。
+1. 打开 [v0.1.1 Release](https://github.com/yihanlabs/information-safety-mask/releases/tag/v0.1.1)，下载 **Source code (zip)** 并完整解压。源码可直接下载，无需仓库访问权限。
 2. 使用 Windows 10/11 x64，准备 [uv](https://docs.astral.sh/uv/getting-started/installation/)、[Node.js 22 或更高版本](https://nodejs.org/en/download)以及 pnpm 11 或 npm。已有 npm 时，脚本会调用锁定版本的 pnpm；Python 3.11 由 uv 自动准备。
 3. 双击 **安装与准备.cmd**（或 `setup.cmd`），等待依赖安装、界面构建和官方模型准备完成。
 4. 双击 **启动工具.cmd**（或 `start.cmd`），浏览器会打开本地工作台。之后日常使用只需运行此启动脚本。
@@ -109,6 +117,12 @@ CPU 加速使用锁定的 PaddlePaddle 3.2.2、PaddleOCR 3.3.2、PaddleX 3.3.13�
 - 导出逐段替换像素并生成完整 RGB PNG，只写入 IHDR、IDAT 和 IEND，去掉原始元数据及透明通道。文件名为 sanitized_001.png 等中性编号。生成前及领取下载时校验确认版本，通过短期单次凭证交给浏览器下载，不在前端聚合整张大文件。
 
 自动识别不能保证找出所有隐私。识别异常、零文字和低置信度均要求人工检查；确认代表用户完成检查，不代表算法证明图片安全。请同时检查未遮住的上下文。
+
+## 许可证
+
+本项目原创代码和文档采用 [MIT 许可证](LICENSE)，允许在保留版权与许可声明的前提下使用、修改和分发。第三方依赖、模型及素材保留各自授权，详见[第三方组件说明](THIRD_PARTY_NOTICES.md)。
+
+v0.1.1 补充许可证、演示及分享素材，应用行为、模型和依赖版本与 v0.1.0 一致。[演示制作说明](docs/media/README.md)记录素材来源与复现方法。
 
 ## 开发与测试
 
